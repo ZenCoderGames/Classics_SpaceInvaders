@@ -1,0 +1,38 @@
+Game Design Document for Space Invaders:
+
+Concept: A minimalist, high-stakes space survival game where players pilot a mobile air turret on the ground that shoots invading aliens coming down from the top of the screen.
+
+1. Game Overview
+Concept: A fixed-shooter where a player-controlled cannon defends Earth against an escalating grid of descending aliens.
+Target Audience: Casual arcade players.
+Core Loop: Shoot aliens → Avoid enemy fire → Earn points → Advance to the next, faster wave.
+
+2. Core Gameplay Mechanics
+Player Control: Horizontal movement only (left/right). 
+One projectile allowed on-screen at a time.
+Enemy Behavior: 5x11 grid moves horizontally as a unit. 
+Reaching a screen edge drops the grid down one row and reverses its direction.
+Dynamic Speed: Enemy movement speed increases automatically as the total number of remaining aliens decreases.
+Win/Loss Conditions: Win by destroying all 55 aliens. Lose instantly if aliens touch the player's ground level or if the player loses all lives.
+
+3. Key Features & Elements
+Destructible Cover: Four green bunkers shield the player. Both player and enemy lasers permanently erode them pixel by pixel.
+Mystery Ship: A UFO randomly flies across the top screen edge, awarding variable bonus points if destroyed.
+Audio Tension: A continuous 4-note descending bass loop that increases in tempo to match the remaining alien speed.
+
+4. Scoring
+Point Values: Top row (Squid) = 30 pts; Middle rows (Crab) = 20 pts; Bottom rows (Octopus) = 10 pts; UFO = 50 to 300 pts.
+
+Art Style
+- Neon green line Art
+
+UI:
+- Use the skill make-classic-game-ui for the HTML layout and javascript for the game logic.
+- The top left panel shows Score, the top right shows Lives left
+
+Game Feel:
+- When the player hits an en enemy or the enemy hits the player, do the following: character specific hit flash, hit pause, camera shake, vfx and sound fx
+- There should be audio and particle effects for: spawning, projectile shots, projectile hits, death
+
+Additonal Notes:
+- All configurable elements should be defined in config.js

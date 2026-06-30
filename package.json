@@ -1,0 +1,13 @@
+{
+  "name": "space-invaders",
+  "private": true,
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve .",
+    "test:smoke": "node scripts/smoke-test.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.52.0",
+    "serve": "^14.2.4"
+  }
+}

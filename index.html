@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Invaders</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="hud-card">
+        <span class="hud-label">Score</span>
+        <span id="score" class="hud-value">0</span>
+      </div>
+
+      <div class="title-block">
+        <h1 class="game-title">Space Invaders</h1>
+        <p class="game-subtitle">Defend Earth</p>
+      </div>
+
+      <div class="hud-card hud-card-right">
+        <span class="hud-label">Lives</span>
+        <span id="lives" class="hud-value">3</span>
+      </div>
+    </header>
+
+    <main class="playfield-shell">
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas"></canvas>
+      </div>
+
+      <div id="menu-overlay" class="overlay">
+        <div class="prompt-card">
+          <p class="prompt-text">Arrow keys or A/D to move</p>
+          <p class="prompt-text">Space to fire</p>
+          <button id="play-btn" class="btn btn-primary" type="button">Play</button>
+        </div>
+      </div>
+
+      <div id="defeat-overlay" class="overlay hidden">
+        <div class="popup">
+          <h2>Defeat</h2>
+          <p id="defeat-message">The invaders have landed.</p>
+          <button id="restart-btn" class="btn btn-primary" type="button">Restart</button>
+        </div>
+      </div>
+
+      <div id="victory-overlay" class="overlay hidden">
+        <div class="popup">
+          <h2>Victory</h2>
+          <p id="victory-message">All invaders destroyed!</p>
+          <button id="next-wave-btn" class="btn btn-primary" type="button">Next Wave</button>
+        </div>
+      </div>
+
+      <div id="pause-overlay" class="overlay hidden">
+        <div class="popup">
+          <h2>Paused</h2>
+          <p>Press P to resume</p>
+          <button id="resume-btn" class="btn btn-primary" type="button">Resume</button>
+        </div>
+      </div>
+    </main>
+
+    <button id="music-toggle" class="music-toggle" type="button">Audio: On</button>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
