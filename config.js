@@ -68,6 +68,10 @@ const CONFIG = {
     maxSpeed: 40,
     dropDistance: 6,
     animIntervalMs: 480,
+    waveScaling: {
+      baseSpeedIncreasePerWave: 2,
+      spawnMargin: 24,
+    },
     types: [
       { name: 'squid', score: 30, rows: [0] },
       { name: 'crab', score: 20, rows: [1, 2] },

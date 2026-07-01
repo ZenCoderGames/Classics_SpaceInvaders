@@ -229,12 +229,26 @@
     return CONFIG.aliens.types[CONFIG.aliens.types.length - 1];
   }
 
+  function getWaveBaseSpeed() {
+    const { baseSpeed, waveScaling } = CONFIG.aliens;
+    return baseSpeed + (wave - 1) * waveScaling.baseSpeedIncreasePerWave;
+  }
+
+  function getWaveStartY() {
+    const { rows, startY, height, vGap, waveScaling } = CONFIG.aliens;
+    const rowStride = height + vGap;
+    const loweredStartY = startY + (wave - 1) * rowStride;
+    const maxStartY = getDefenseLineY() - (rows - 1) * rowStride - height - waveScaling.spawnMargin;
+    return Math.min(loweredStartY, maxStartY);
+  }
+
   function getAlienSpeed() {
     const alive = aliens.filter((a) => a.alive).length;
     const total = CONFIG.aliens.rows * CONFIG.aliens.cols;
-    if (total === 0) return CONFIG.aliens.baseSpeed;
+    const baseSpeed = getWaveBaseSpeed();
+    if (total === 0) return baseSpeed;
     const ratio = 1 - alive / total;
-    return CONFIG.aliens.baseSpeed + (CONFIG.aliens.maxSpeed - CONFIG.aliens.baseSpeed) * ratio;
+    return baseSpeed + (CONFIG.aliens.maxSpeed - baseSpeed) * ratio;
   }
 
   // --- Bunkers ---
@@ -332,7 +346,8 @@
 
   function initAliens() {
     aliens = [];
-    const { rows, cols, startX, startY, width, height, hGap, vGap } = CONFIG.aliens;
+    const { rows, cols, startX, width, height, hGap, vGap } = CONFIG.aliens;
+    const waveStartY = getWaveStartY();
     for (let row = 0; row < rows; row += 1) {
       for (let col = 0; col < cols; col += 1) {
         const type = getAlienTypeForRow(row);
@@ -340,7 +355,7 @@
           row,
           col,
           x: startX + col * (width + hGap),
-          y: startY + row * (height + vGap),
+          y: waveStartY + row * (height + vGap),
           width,
           height,
           alive: true,
