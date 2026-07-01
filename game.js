@@ -56,6 +56,56 @@
 
   // --- Audio ---
 
+  let musicGain = null;
+  let musicConnected = false;
+  const music = new Audio();
+  music.loop = true;
+  music.preload = 'auto';
+  music.src = CONFIG.assets.music;
+
+  function getMusicGainValue() {
+    const { masterVolume, musicVolume, musicAttenuation } = CONFIG.audio;
+    return musicVolume * masterVolume * musicAttenuation;
+  }
+
+  function connectMusicToAudioGraph() {
+    const actx = getAudioContext();
+    if (!actx || musicConnected) return;
+
+    const source = actx.createMediaElementSource(music);
+    musicGain = actx.createGain();
+    source.connect(musicGain);
+    musicGain.connect(actx.destination);
+    musicConnected = true;
+    music.volume = 1;
+  }
+
+  function shouldPlayMusic() {
+    return gameState !== STATE.MENU && gameState !== STATE.GAME_OVER;
+  }
+
+  function syncMusic(shouldPlay = shouldPlayMusic()) {
+    connectMusicToAudioGraph();
+
+    const gain = getMusicGainValue();
+    if (musicGain) {
+      musicGain.gain.value = audioEnabled && shouldPlay ? gain : 0;
+    } else {
+      music.volume = gain;
+    }
+
+    if (!audioEnabled || !shouldPlay) {
+      music.pause();
+      return;
+    }
+
+    music.play().catch(() => {});
+  }
+
+  function updateMusicToggleLabel() {
+    musicToggle.textContent = audioEnabled ? 'Sound: On' : 'Sound: Off';
+  }
+
   function getAudioContext() {
     if (!audioCtx) {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -390,6 +440,7 @@
 
   function startGame(fromWave = 1) {
     resumeAudio();
+    syncMusic(true);
     wave = fromWave;
     score = fromWave > 1 ? score : 0;
     lives = CONFIG.player.lives;
@@ -410,6 +461,7 @@
     resetWave();
     updateHud();
     hideAllOverlays();
+    syncMusic(true);
     gameState = STATE.SPAWNING;
     spawnParticles(CONFIG.canvas.width / 2, CONFIG.canvas.height / 2, CONFIG.effects.particleCount.spawn);
     sfxSpawn();
@@ -439,6 +491,7 @@
 
   function gameOver(reason) {
     gameState = STATE.GAME_OVER;
+    syncMusic(false);
     defeatMessage.textContent = reason;
     showOverlay(defeatOverlay);
   }
@@ -475,8 +528,9 @@
 
   musicToggle.addEventListener('click', () => {
     audioEnabled = !audioEnabled;
-    musicToggle.textContent = audioEnabled ? 'Audio: On' : 'Audio: Off';
+    updateMusicToggleLabel();
     if (audioEnabled) resumeAudio();
+    syncMusic();
   });
 
   // --- Update helpers ---
@@ -1064,6 +1118,8 @@
 
   // Initial state
   updateHud();
+  updateMusicToggleLabel();
+  syncMusic(false);
   requestAnimationFrame((now) => {
     lastTime = now;
     loop(now);

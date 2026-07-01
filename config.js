@@ -103,6 +103,10 @@ const CONFIG = {
     waveBonus: 500,
   },
 
+  assets: {
+    music: 'audio/music.mp3',
+  },
+
   effects: {
     hitPauseMs: 80,
     playerHitPauseMs: 120,
@@ -125,6 +129,8 @@ const CONFIG = {
   audio: {
     enabled: true,
     masterVolume: 0.35,
+    musicVolume: 0.5,
+    musicAttenuation: 0.42,
     bassNotes: [110, 98, 87, 78],
     bassMinIntervalMs: 420,
     bassMaxIntervalMs: 900,
